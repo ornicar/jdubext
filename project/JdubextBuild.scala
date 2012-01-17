@@ -17,6 +17,6 @@ object JdubextBuild extends Build
     publishTo := Some(Resolver.sftp(
       "iliaz",
       "scala.iliaz.com"
-    ) as ("scala_iliaz_com", Path.userHome / ".ssh" / "id_rsa"))
+    ) as ("scala_iliaz_com", Path.userHome / ".ssh" / "id_rsa.pub"))
   )
 }
