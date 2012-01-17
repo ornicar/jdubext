@@ -33,6 +33,7 @@ object SQL {
   }
 
   case class Data(nameSeq: List[String], typeSeq: List[String], valueSeq: List[Any]) {
+
     def aggregate(name: String, tpe: String, vals: List[Any]) = Data(
       name :: nameSeq,
       tpe :: typeSeq,
@@ -45,6 +46,16 @@ object SQL {
 
     def values = valueSeq
 
-    def toSql(pattern: String) = SQL(pattern.format(names, types), values)
+    def setters = nameSeq zip typeSeq map (a => a._1 + " = " + a._2) mkString ", "
+
+    def insertIn(table: String) = SQL(
+      "INSERT INTO %s (%s) VALUES (%s)".format(table, names, types),
+      values)
+
+    def updateIn(table: String) = new {
+      def where(condition: String) = SQL(
+        "UPDATE %s SET %s WHERE %s".format(table, setters, condition),
+        values)
+    }
   }
 }

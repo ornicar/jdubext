@@ -67,4 +67,26 @@ class DatabaseSQLTest extends Specification {
       )
     }
   }
+  "The insertIn function" should {
+    "produce a valid query" in {
+      SQL.data(
+        "foo" -> "?" -> "bar",
+        "foo2" -> "?::inet" -> "bar2"
+      ) insertIn "baz" mustEqual SQL(
+        "INSERT INTO baz (foo, foo2) VALUES (?, ?::inet)",
+        "bar" :: "bar2" :: Nil
+      )
+    }
+  }
+  "The updateIn function" should {
+    "produce a valid query" in {
+      SQL.data(
+        "foo" -> "?" -> "bar",
+        "foo2" -> "?::inet" -> "bar2"
+      ) updateIn "baz" where "id = 33" mustEqual SQL(
+        "UPDATE baz SET foo = ?, foo2 = ?::inet WHERE id = 33",
+        "bar" :: "bar2" :: Nil
+      )
+    }
+  }
 }
