@@ -7,16 +7,24 @@ import com.codahale.jdub._
 
 object Database {
 
+  def postgresql(
+    host: String,
+    dbName: String,
+    username: String,
+    password: String,
+    jdbcProperties: Map[String, String] = Map.empty
+  ) = connect(host, dbName, username, password, "postgresql", jdbcProperties)
+
   /**
    * Create a connection to the given database.
    */
   def connect(
     host: String,
-    dbname: String,
+    dbName: String,
     username: String,
     password: String,
-    jdbcProperties: Map[String, String] = Map.empty,
-    driverName: String = "postgresql"
+    driverName: String = "postgresql",
+    jdbcProperties: Map[String, String] = Map.empty
   ): Database = {
 
     Class forName "org.%s.Driver".format(driverName)
@@ -26,7 +34,7 @@ object Database {
     props.setProperty("password", password)
     for ((k, v) <- jdbcProperties) props.setProperty(k, v)
 
-    val url = "jdbc:%s://%s/%s".format(driverName, host, dbname)
+    val url = "jdbc:%s://%s/%s".format(driverName, host, dbName)
 
     val connection = DriverManager.getConnection(url, props)
 
