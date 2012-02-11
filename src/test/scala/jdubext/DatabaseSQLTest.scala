@@ -83,9 +83,9 @@ class DatabaseSQLTest extends Specification {
       SQL.data(
         "foo" -> "?" -> "bar",
         "foo2" -> "?::inet" -> "bar2"
-      ) updateIn "baz" where "id = 33" mustEqual SQL(
-        "UPDATE baz SET foo = ?, foo2 = ?::inet WHERE id = 33",
-        "bar" :: "bar2" :: Nil
+      ) updateIn "baz" where ("id = ?", Seq(33)) mustEqual SQL(
+        "UPDATE baz SET foo = ?, foo2 = ?::inet WHERE id = ?",
+        "bar" :: "bar2" :: 33 :: Nil
       )
     }
   }
