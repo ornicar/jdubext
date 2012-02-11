@@ -66,8 +66,7 @@ class Database(connection: Connection) {
   def transactionEither[A, B](f: Transaction => Either[A, B]): Either[A, B] = {
     connection setAutoCommit false
     val result = f(new Transaction(connection))
-    connection.commit()
-    result.left foreach { _ => connection.rollback() }
+    result.fold( _ => connection.rollback(), _ => connection.commit())
     connection setAutoCommit true
     result
   }
