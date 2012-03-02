@@ -53,9 +53,9 @@ object SQL {
       values)
 
     def updateIn(table: String) = new {
-      def where(condition: String, whereValues: Seq[Any] = Seq.empty) = SQL(
-        "UPDATE %s SET %s WHERE %s".format(table, setters, condition),
-        values ::: whereValues.toList)
+      def where(condition: (String, Seq[Any])) = SQL(
+        "UPDATE %s SET %s WHERE %s".format(table, setters, condition._1),
+        values ::: condition._2.toList)
     }
   }
 }
