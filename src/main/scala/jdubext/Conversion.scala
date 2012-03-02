@@ -12,14 +12,14 @@ trait RowConversions {
     /**
      * Extract the value at the given offset as an Option[DateTime].
      */
-    def jodaDateTime(index: Int): Option[DateTime] = row time index map { time ⇒
+    def jodaDateTime(index: Int): Option[DateTime] = row timestamp index map { time ⇒
       new DateTime(time)
     }
 
     /**
      * Extract the value with the given name as an Option[DateTime].
      */
-    def jodaDateTime(name: String): Option[DateTime] = row time name map { time ⇒
+    def jodaDateTime(name: String): Option[DateTime] = row timestamp name map { time ⇒
       new DateTime(time)
     }
   }
