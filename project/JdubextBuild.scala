@@ -6,13 +6,14 @@ object JdubextBuild extends Build
   lazy val core = Project("core", file("./"), settings = Defaults.defaultSettings ++ Seq(
     organization:= "com.github.ornicar",
     name := "jdubext",
-    version := "1.6",
+    version := "1.7",
     scalaVersion := "2.9.1",
     libraryDependencies := Seq(
       "com.codahale" %% "jdub" % "0.0.6",
       "joda-time" % "joda-time" % "2.0",
       "org.joda" % "joda-convert" % "1.2",
-      "org.specs2" %% "specs2" % "1.8.2"
+      "org.specs2" %% "specs2" % "1.8.2",
+      "org.scalaz" %% "scalaz-core" % "6.0.4"
     ),
     //libraryDependencies in Test += "org.specs2" %% "specs2" % "1.8.2",
     //resolvers := Seq(codahale, typesafe, iliaz),

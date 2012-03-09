@@ -4,6 +4,7 @@ import java.sql.{ DriverManager, Connection, Types, PreparedStatement }
 import java.util.Properties
 import scala.collection.mutable.WeakHashMap
 import com.codahale.jdub._
+import scalaz.{ Validation, Validations }
 
 object Database {
 
@@ -42,7 +43,7 @@ object Database {
   }
 }
 
-class Database(connection: Connection) {
+class Database(connection: Connection) extends Validations {
 
   /**
    * Opens a transaction which is committed after `f` is called.
@@ -70,6 +71,15 @@ class Database(connection: Connection) {
     connection setAutoCommit true
     result
   }
+
+  /**
+   * Opens a functional transaction which is committed after `f` is called.
+   * If `f` returns a Failure value, the transaction is rolled back.
+   */
+  def transactionValidation[A, B](f: Transaction => Validation[A, B]): Validation[A, B] =
+    validation {
+      transactionEither(((v: Validation[A, B]) ⇒ v.either) compose f)
+    }
 
   /**
    * Performs a query and returns the results.
