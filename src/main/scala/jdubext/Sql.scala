@@ -65,6 +65,7 @@ object SQL {
   case class Multi(datas: NonEmptyList[Data]) {
 
     def +(other: Data): Multi = Multi(other, datas.list)
+    def +(other: Multi): Multi = Multi(other.datas.head, other.datas.tail ::: datas.list)
 
     def insertIn(table: String) = SQL(
       "INSERT INTO %s (%s) VALUES (%s)".format(
