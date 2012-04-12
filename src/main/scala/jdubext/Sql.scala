@@ -3,7 +3,16 @@ package com.github.ornicar.jdubext
 import com.codahale.jdub._
 import scalaz.{ NonEmptyList, NonEmptyLists }
 
-case class SQL(sql: String, values: Seq[Any] = Nil) extends Statement
+case class SQL(sql: String, values: Seq[Any] = Nil) extends Statement {
+
+  def returningInt(field: String) = returning(field, _ int 0)
+
+  def returning[A](field: String, mapping: Row ⇒ Option[A]) = new FlatSingleRowQuery[A] {
+    val sql = SQL.this.sql + " RETURNING " + field
+    val values = SQL.this.values
+    def flatMap(row: Row) = mapping(row)
+  }
+}
 
 object SQL {
 
