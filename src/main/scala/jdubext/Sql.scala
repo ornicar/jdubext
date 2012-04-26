@@ -50,6 +50,12 @@ object SQL {
       vals ::: valueSeq
     )
 
+    def aggregate(data: Data) = Data(
+      nameSeq ::: data.nameSeq,
+      typeSeq ::: data.typeSeq,
+      valueSeq ::: data.valueSeq
+    )
+
     def names = nameSeq mkString ", "
 
     def types = typeSeq mkString ", "
@@ -69,6 +75,7 @@ object SQL {
     }
 
     def +(other: Data): Multi = Multi(this, other)
+    def +(other: Multi): Multi = other + this
   }
 
   case class Multi(datas: NonEmptyList[Data]) {
